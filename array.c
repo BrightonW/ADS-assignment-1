@@ -1,4 +1,3 @@
-
 #include "array.h"
 list_t createList() {
 	return NULL;
@@ -6,10 +5,14 @@ list_t createList() {
 
 // insert at start
 list_t insert(data_t *d, list_t l) {
-	node_t *node= my_malloc(sizeof(*node));
-	node->d= d;
-	node->next=l;
-	return node;
+    node_t *node = (node_t *)malloc(sizeof(*node));
+    if (node == NULL) {
+        perror("Memory allocation error");
+        exit(EXIT_FAILURE);
+    }
+    node->d = d;
+    node->next = l;
+    return node;
 }
 
 void search(char *key, list_t l, FILE *f) {
@@ -37,11 +40,5 @@ void free_list(list_t l){
 		free(t);
 	}
 }
-void *my_malloc(size_t n){
-	assert(n>0);
-	void *p= malloc(n);
-	assert(p);
-	return p;
-} 
 
 
