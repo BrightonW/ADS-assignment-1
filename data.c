@@ -1,11 +1,12 @@
-//#include "array.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "data.h"
+#include<ctype.h>
+
 #define KEY_INDEX 7
 #define Q '\"'
-#define C ','    
-#define NUM_FIELDS 14
-
-char *header[NUM_FIELDS];  //header storing
+char *header[FIELDS];  //header storing
 
 // function definition
 void dataPrintHeader(FILE *file){
@@ -33,8 +34,8 @@ void printData(FILE *file, data_t *data){
     fprintf(file, "%s: %s || ", header[9], data->i_desc);
     fprintf(file, "%s: %s || ", header[10], data->seat_type);
     fprintf(file, "%s: %s || ", header[11], data->num_seats);
-    fprintf(file, "%s: %s || ", header[12], data->longitude);
-    fprintf(file, "%s: %s || ", header[13], data->latitude);
+    fprintf(file, "%s: %s || ", header[12], data->longi);
+    fprintf(file, "%s: %s || ", header[13], data->lat);
 
     fprintf(file, "\n");
 }
@@ -120,8 +121,11 @@ data_t *get_next_data(FILE *f) {
     char *s = read_field(f, C);
     if (!s) return NULL;
 
-    data_t *d = (data_t *)my_malloc(sizeof(data_t));
-
+    data_t *d = (data_t *)malloc(sizeof(data_t));
+    if (!d) {
+        perror("Memory allocation error");
+        exit(EXIT_FAILURE);
+    }
     d->cyear = s;
     d->block_id = read_field(f, C);
     d->prop_id = read_field(f, C);
@@ -153,17 +157,13 @@ void freeData(data_t *data) {
 
     free(data);
 }
-FILE *my_fopen( char *fname, char *mode) {
-	FILE *f= fopen(fname, mode);
-	assert(f);
-	return f;
-}
 
-int main(int argc, char *argv[]) {
-    if (argc != 4) {
-    printf("Usage: %s <stage> <data_file> <output_file>\n", argv[0]);
-    return 1;
+
+/*char *my_strdup(char *str) {
+    size_t len=strlen(str);
+	char *new_str= (char*)malloc(len+1);
+    if(newstr){
+        strcpy(newstr,str);
     }
-    
-
-}
+	return new_str;
+}*/
